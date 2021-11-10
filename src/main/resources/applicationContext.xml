@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:settingsDB.properties"/>
+
+    <bean id="connectionFactoryBean"
+          class="org.apache.activemq.ActiveMQConnectionFactory">
+<!--        <constructor-arg value="vm://localhost?create=true"/>-->
+        <constructor-arg value="user"/>
+        <constructor-arg value="user"/>
+        <constructor-arg value="failover://tcp://localhost:61616"/>
+    </bean>
+
+
+    <bean id="consumerBean"
+          class="org.example.Consumer">
+        <constructor-arg ref="connectionFactoryBean"/>
+        <constructor-arg value="1" type="int"/>
+        <constructor-arg value="SimpleQueue"/>
+    </bean>
+
+    <bean id="producerBean"
+          class="org.example.Producer">
+        <constructor-arg ref="connectionFactoryBean"/>
+        <constructor-arg value="1" type="int"/>
+        <constructor-arg value="SimpleQueue"/>
+        <constructor-arg value="2" type="int"/>
+    </bean>
+
+    <bean id="managerDBBean"
+          class="org.example.ManagerDB">
+        <constructor-arg value="${url}"/>
+        <constructor-arg value="${usernameDB}"/>
+        <constructor-arg value="${passwordDB}"/>
+    </bean>
+
+</beans>
